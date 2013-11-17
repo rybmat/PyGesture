@@ -1,6 +1,14 @@
 import sys
-from OSX_mouse_controller import Mouse
 
+system = sys.platform
+if system == 'darwin':
+	print "platform: OSX"
+	from OSX_mouse_controller import Mouse
+elif system == 'linux2':
+	print "platform: Linux2"
+	from Linux_mouse_controller import Mouse
+else:
+	print "OS not supported"
 
 import curses
 	
@@ -41,7 +49,7 @@ if __name__ == '__main__':
 		        m.moveBy(STEP, 0)
 
 		    elif key == ord(' '):
-		    	m.doubleRightClick()
+		    	m.rightClick()
 
 	finally:
 		curses.endwin()
