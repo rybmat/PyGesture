@@ -49,7 +49,10 @@ if __name__ == '__main__':
 		        m.moveBy(STEP, 0)
 
 		    elif key == ord(' '):
-		    	m.rightClick()
+		    	m.leftButtonDown()
+
+		    elif key == ord('b'):
+		    	m.leftButtonUp()
 
 	finally:
 		curses.endwin()

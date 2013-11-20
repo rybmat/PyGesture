@@ -7,6 +7,10 @@ from Quartz.CoreGraphics import kCGEventLeftMouseUp
 from Quartz.CoreGraphics import kCGEventRightMouseUp
 from Quartz.CoreGraphics import kCGMouseButtonLeft
 from Quartz.CoreGraphics import kCGHIDEventTap
+from Quartz.CoreGraphics import CGDisplayMoveCursorToPoint
+from Quartz.CoreGraphics import CGDisplayShowCursor
+from Quartz.CoreGraphics import CGWarpMouseCursorPosition
+from Quartz.CoreGraphics import CGAssociateMouseAndMouseCursorPosition
 from AppKit import NSScreen
 
 
@@ -16,13 +20,12 @@ class Mouse():
     def __init__(self, x=100, y=100):
         self.maxX = int(NSScreen.mainScreen().frame().size.width)      
         self.maxY = int(NSScreen.mainScreen().frame().size.height)
-        
+        CGAssociateMouseAndMouseCursorPosition(True)
 
         if (x in range(0, self.maxX)) and (y in range(0, self.maxY)):
             self.moveTo(x, y)
         else:
             self.moveTo(0, 0)
-
 
     def __mouseEvent(self, type, x, y):
         """creates mouse event of given type at (posx, posy) position"""
@@ -50,7 +53,10 @@ class Mouse():
 
         print self.x, self.y
         
-        self.__mouseEvent(kCGEventMouseMoved, self.x, self.y)
+        #self.__mouseEvent(kCGEventMouseMoved, self.x, self.y)
+        CGDisplayMoveCursorToPoint (0, (x, y))
+        #CGWarpMouseCursorPosition((x,y))
+        CGDisplayShowCursor(0)
 
 
     def moveBy(self, x, y):
