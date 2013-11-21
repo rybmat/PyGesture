@@ -8,9 +8,9 @@ from Quartz.CoreGraphics import kCGEventRightMouseUp
 from Quartz.CoreGraphics import kCGMouseButtonLeft
 from Quartz.CoreGraphics import kCGHIDEventTap, kCGEventLeftMouseDragged, kCGEventSourceStateHIDSystemState
 from Quartz.CoreGraphics import CGEventCreate
-from Quartz.CoreGraphics import CGAssociateMouseAndMouseCursorPosition, CGEventGetLocation
+from Quartz.CoreGraphics import CGEventGetLocation
 from Quartz.CoreGraphics import CGEventSourceCreate
-from AppKit import NSScreen, NSEvent, NSMouseMovedMask
+from AppKit import NSScreen, NSEvent
 
 class Mouse():
     """a class containing attributes and methods needed to controlling mouse cursor
@@ -18,12 +18,7 @@ class Mouse():
     def __init__(self):
         self.maxX = int(NSScreen.mainScreen().frame().size.width)      
         self.maxY = int(NSScreen.mainScreen().frame().size.height)
-        self.__leftButtonPressed = False
-        self.__rightButtonPressed = False
-        CGAssociateMouseAndMouseCursorPosition(True)
-        
-        self.mouseMovementEventMonitor = NSEvent.addGlobalMonitorForEventsMatchingMask_handler_(NSMouseMovedMask, lambda event: self.simulateMouseEvent(kCGEventLeftMouseDragged, self.x, self.y))
-    
+
         self.moveBy(0,0)
 
 
@@ -53,9 +48,7 @@ class Mouse():
         print self.x, self.y
         
         self.__mouseEvent(kCGEventMouseMoved, self.x, self.y)
-        #if self.__leftButtonPressed:
-         #   self.leftButtonUp()
-          #  self.leftButtonDown()
+        self.__mouseEvent(kCGEventLeftMouseDragged, self.x, self.y)
 
 
     def moveBy(self, x, y):
@@ -68,13 +61,11 @@ class Mouse():
 
     def leftButtonDown(self):
         """makes left button of mouse pushed"""
-        self.__leftButtonPressed = True
         self.__mouseEvent(kCGEventLeftMouseDown, self.x, self.y)
        
 
     def leftButtonUp(self):
         """makes left button of mouse unpushed"""
-        self.__leftButtonPressed = False
         self.__mouseEvent(kCGEventLeftMouseUp, self.x, self.y)
 
 
@@ -85,7 +76,7 @@ class Mouse():
 
 
     def doubleLeftClick(self):
-        "" 
+        """ makes double left Click """
         self.leftClick()
         self.leftClick()
 
@@ -93,13 +84,11 @@ class Mouse():
 
     def rightButtonDown(self):
         """makes right button of mouse pushed"""
-        self.__rightButtonPressed = True
         self.__mouseEvent(kCGEventRightMouseDown, self.x, self.y)
 
 
     def rightButtonUp(self):
         """makes right button of mouse unpushed"""
-        self.__rightButtonPressed = False
         self.__mouseEvent(kCGEventRightMouseUp, self.x, self.y)
 
 
@@ -110,6 +99,7 @@ class Mouse():
 
 
     def doubleRightClick(self):
+        """ makes double right Click """
         self.rightClick()
         self.rightClick()
 

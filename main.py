@@ -9,7 +9,7 @@ elif system == 'linux2':
 	print "platform: Linux2"
 	from Linux_mouse_controller import Mouse
 else:
-	print "OS not supported"
+	print "OS not supported, probably Windows ;)"
 
 import curses
 	
@@ -19,31 +19,32 @@ if __name__ == '__main__':
 
 	m = Mouse()
 
-	m.moveTo(400, 100)
+	m.moveTo(500, 28)
 	sleep(1)
 	m.leftClick()
 	m.leftButtonDown()
 	sleep(1)
 	for i in xrange(10):
-		sleep(1)
+		sleep(0.5)
 		m.moveBy(5,5)
 	m.leftButtonUp()
 	sleep(1)
 	for i in xrange(10):
-		sleep(1)
+		sleep(0.5)
 		m.moveBy(5,10)
 	m.rightClick()
 	sleep(3)
+	m.leftClick()
 	for i in xrange(5):
-		sleep(1)
+		sleep(0.5)
 		m.moveBy(-5,-10)
 	for i in xrange(5):
-		sleep(1)
+		sleep(0.5)
 		m.moveBy(-5,-5)
 	m.leftButtonDown()
 	sleep(1)
 	for i in xrange(10):
-		sleep(1)
+		sleep(0.5)
 		m.moveBy(5,5)
 	m.leftButtonUp()
 
