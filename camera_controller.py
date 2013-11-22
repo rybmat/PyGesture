@@ -12,7 +12,7 @@ if __name__ == "__main__":
 		ret,frame=camera.read()
 		track_window=(100,100,50,50)
 		hsv_roi =  cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-		mask = cv2.inRange(hsv_roi, np.array((0,0,32)), np.array((100,255,150)))
+		mask = cv2.inRange(hsv_roi, np.array((0.,60.,32.)), np.array((180.,255.,255.)))
 		roi_hist = cv2.calcHist([hsv_roi],[0],mask,[180],[0,180])
 		cv2.normalize(roi_hist,roi_hist,0,255,cv2.NORM_MINMAX)
 		term_crit = ( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 20, 1 )
