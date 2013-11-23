@@ -1,5 +1,6 @@
 import sys
 from time import sleep
+from camera_controller import track_hand
 
 system = sys.platform
 if system == 'darwin':
@@ -15,7 +16,10 @@ import curses
 	
 if __name__ == '__main__':
 
-	STEP = 10
+	a=track_hand()
+	a.track()
+
+	'''STEP = 10
 
 	m = Mouse()
 
@@ -46,7 +50,7 @@ if __name__ == '__main__':
 	for i in xrange(10):
 		sleep(0.5)
 		m.moveBy(5,5)
-	m.leftButtonUp()
+	m.leftButtonUp()'''
 
 	#try:
 		#stdscr = curses.initscr()
