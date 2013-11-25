@@ -14,11 +14,12 @@ else:
 	print "OS not supported, probably Windows ;)"
 
 
-def scale_coordinates(m,cam):
-	x2,y2,w2,h2=a.track_window
-	k1=m.maxX/cam.frame_width
-	k2=m.maxY/cam.frame_height
-	return int(k1*(2*x2+w2)/2), int(k2*(2*y2+h2)/2)
+def scale_coordinates(m, cam, frameWidth, frameHeight):
+	x2, y2, w2, h2 = a.track_window
+	k1 = m.maxX / frameWidth
+	k2 = m.maxY / frameHeight
+
+	return int(k1 * (2 * x2 + w2) / 2), int(k2 * (2 * y2 + h2) / 2)
 
 if __name__ == '__main__':
 	
@@ -38,9 +39,9 @@ if __name__ == '__main__':
                         if retval:
                                 flipped = cv2.flip(image,1)
                                 a.track(flipped)
-                                x, y, w, h = a.track_window
-                                movex,movey=scale_coordinates(m,a)
-                                m.moveTo(movex,movey)
+                                
+                                movex, movey = scale_coordinates(m, a, camera.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH), camera.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT))
+                                m.moveTo(movex, movey)
                                 
                                 cv2.imshow("Camera", flipped)
                                 if not working:
