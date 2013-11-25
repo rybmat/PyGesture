@@ -16,13 +16,12 @@ class track_hand:
 			hsv_roi=cv2.erode(hsv_roi, kernel,iterations=2)
 			print(hsv_roi)
 			hsv_roi = hsv_roi[:,:,:2]
-			mask = cv2.inRange(hsv_roi, np.array((5,200)), np.array((10,256)))
+			mask = cv2.inRange(hsv_roi, np.array((5,59)), np.array((10,170)))
 			self.roi_hist = cv2.calcHist([hsv_roi],[0],mask,[180],[0,180])
 		cv2.normalize(self.roi_hist,self.roi_hist,0,255,cv2.NORM_MINMAX)
 		self.term_crit = ( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1 )
 	def track(self):
-		working=0
-		while True:
+		#while True:
 			retval, image = self.camera.read()
 			if retval:
 				flipped = cv2.flip(image,0)
@@ -32,13 +31,7 @@ class track_hand:
         			x,y,w,h = self.track_window
         			cv2.rectangle(flipped, (x,y), (x+w,y+h), 255,2)
 				cv2.imshow("Camera", flipped)
-				if not working:
-					print "Camera is working now..."
-					working = 1
-			
+				key=cv2.waitKey(5)
 			#break on Escape
-				key = cv2.waitKey(20)
-				if key == 27:
-					break
 			else:
 				print "Camera is not opened"

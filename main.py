@@ -13,13 +13,17 @@ else:
 	print "OS not supported, probably Windows ;)"
 
 import curses
-	
+
+
 if __name__ == '__main__':
-
+	STEP=10
+	m=Mouse()
 	a=track_hand()
-	a.track()
-
-	'''STEP = 10
+	while True:
+		a.track()
+		x,y,w,h=a.track_window
+		m.moveTo((2*x+w)/2,(2*y+h)/2)
+	'''
 
 	m = Mouse()
 
