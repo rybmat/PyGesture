@@ -10,12 +10,16 @@ class track_hand:
 		if self.camera.isOpened():
 			frame=cv2.imread('hand.jpg',1)
 			self.track_window=(100,100,50,50)
-			self.hsv_roi =  cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-			self.hsv_roi = self.hsv_roi[:,:,:1]
-			self.mask = cv2.inRange(self.hsv_roi, np.array((0)), np.array((10)))
-			self.roi_hist = cv2.calcHist([self.hsv_roi],[0],self.mask,[10],[0,10])
+			hsv_roi =  cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+			kernel=np.ones((5,5),np.float32)/25
+			hsv_roi=cv2.dilate(hsv_roi, kernel,iterations=2)
+			hsv_roi=cv2.erode(hsv_roi, kernel,iterations=2)
+			print(hsv_roi)
+			hsv_roi = hsv_roi[:,:,:2]
+			mask = cv2.inRange(hsv_roi, np.array((5,200)), np.array((10,256)))
+			self.roi_hist = cv2.calcHist([hsv_roi],[0],mask,[180],[0,180])
 		cv2.normalize(self.roi_hist,self.roi_hist,0,255,cv2.NORM_MINMAX)
-		self.term_crit = ( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 20, 1 )
+		self.term_crit = ( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1 )
 	def track(self):
 		working=0
 		while True:
@@ -23,7 +27,7 @@ class track_hand:
 			if retval:
 				flipped = cv2.flip(image,0)
 				hsv = cv2.cvtColor(flipped, cv2.COLOR_BGR2HSV)
-        			dst = cv2.calcBackProject([hsv],[0],self.roi_hist,[0,10],1)
+        			dst = cv2.calcBackProject([hsv],[0],self.roi_hist,[0,180],1)
         			ret, self.track_window = cv2.CamShift(dst, self.track_window, self.term_crit)
         			x,y,w,h = self.track_window
         			cv2.rectangle(flipped, (x,y), (x+w,y+h), 255,2)
