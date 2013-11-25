@@ -14,15 +14,22 @@ else:
 
 import curses
 
+def scale_coordinates(m,cam):
+	x2,y2,w2,h2=a.track_window
+	k1=m.maxX/cam.frame_width
+	k2=m.maxY/cam.frame_height
+	return int(k1*(2*x2+w2)/2), int(k2*(2*y2+h2)/2)
 
 if __name__ == '__main__':
 	STEP=10
 	m=Mouse()
 	a=track_hand()
 	while True:
-		a.track()
-		x,y,w,h=a.track_window
-		m.moveTo((2*x+w)/2,(2*y+h)/2)
+		key=a.track()
+		if key==27:
+			break
+		movex,movey=scale_coordinates(m,a)
+		m.moveTo(movex,movey)
 	'''
 
 	m = Mouse()
