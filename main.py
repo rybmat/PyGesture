@@ -1,6 +1,7 @@
 import sys
+import cv2
 from time import sleep
-from camera_controller import track_hand
+from Hand_tracking import Track_hand
 
 system = sys.platform
 if system == 'darwin':
@@ -12,86 +13,39 @@ elif system == 'linux2':
 else:
 	print "OS not supported, probably Windows ;)"
 
-import curses
 
 
 if __name__ == '__main__':
-	STEP=10
-	m=Mouse()
-	a=track_hand()
-	while True:
-		a.track()
-		x,y,w,h=a.track_window
-		m.moveTo((2*x+w)/2,(2*y+h)/2)
-	'''
+	
+	print "Opening camera..."
+        camera = cv2.VideoCapture(0)
+        working = 0
 
-	m = Mouse()
+        STEP = 10
+        m = Mouse()
+        a = Track_hand()
 
-	m.moveTo(500, 28)
-	sleep(1)
-	m.leftClick()
-	m.leftButtonDown()
-	sleep(1)
-	for i in xrange(10):
-		sleep(0.5)
-		m.moveBy(5,5)
-	m.leftButtonUp()
-	sleep(1)
-	for i in xrange(10):
-		sleep(0.5)
-		m.moveBy(5,10)
-	m.rightClick()
-	sleep(3)
-	m.leftClick()
-	for i in xrange(5):
-		sleep(0.5)
-		m.moveBy(-5,-10)
-	for i in xrange(5):
-		sleep(0.5)
-		m.moveBy(-5,-5)
-	m.leftButtonDown()
-	sleep(1)
-	for i in xrange(10):
-		sleep(0.5)
-		m.moveBy(5,5)
-	m.leftButtonUp()'''
+        cv2.namedWindow("Camera")
+        if camera.isOpened():
+                while True:
+                        retval, image = camera.read()
+                        
+                        if retval:
+                                flipped = cv2.flip(image,1)
+                                a.track(flipped)
+                                x, y, w, h = a.track_window
+                                m.moveTo((2 * x + w) / 2, (2 * y + h) / 2)
+                                
+                                cv2.imshow("Camera", flipped)
+                                if not working:
+                                        print "Camera is working now..."
+                                        working = 1
+                        
+                        #break on Escape
+                        key = cv2.waitKey(20)
+                        if key == 27:
+                                break
+        else:
+                print "Camera is not opened"
 
-	#try:
-		#stdscr = curses.initscr()
-		#curses.cbreak()
-		#stdscr.keypad(1)
-#
-		#stdscr.addstr(0,10,"Hit 'q' to quit")
-		#stdscr.refresh()
-#
-		#key = ''
-		#while key != ord('q'):
-		    #key = stdscr.getch()
-		    #stdscr.addch(20,25,key)
-		    #print "size " + str(m.x) + " " + str (m.y) + " " + str(m.maxX) + " " + str(m.maxY)
-		    #stdscr.refresh()
-		    #if key == curses.KEY_UP: 
-		        #stdscr.addstr(2, 20, "Up")
-		        #m.moveBy(0, -STEP)	        
-#
-		    #elif key == curses.KEY_DOWN: 
-		        #stdscr.addstr(3, 20, "Down")
-		        #m.moveBy(0, STEP)
-#
-		    #elif key == curses.KEY_LEFT:
-		    	#stdscr.addstr(4, 20, "Left")
-		        #m.moveBy(-STEP, 0)
-#
-		    #elif key == curses.KEY_RIGHT:
-		    	#stdscr.addstr(5, 20, "Right")
-		        #m.moveBy(STEP, 0)
-#
-		    #elif key == ord(' '):
-		    	#m.leftButtonDown()
-#
-		    #elif key == ord('b'):
-		    	#m.leftButtonUp()
-#
-	#finally:
-		#curses.endwin()
 

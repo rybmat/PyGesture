@@ -45,7 +45,7 @@ class Mouse():
         else:
             self.y = y 
 
-        print self.x, self.y
+        #print self.x, self.y
         
         self.__mouseEvent(kCGEventMouseMoved, self.x, self.y)
         self.__mouseEvent(kCGEventLeftMouseDragged, self.x, self.y)
