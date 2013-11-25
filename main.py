@@ -14,6 +14,11 @@ else:
 	print "OS not supported, probably Windows ;)"
 
 
+def scale_coordinates(m,cam):
+	x2,y2,w2,h2=a.track_window
+	k1=m.maxX/cam.frame_width
+	k2=m.maxY/cam.frame_height
+	return int(k1*(2*x2+w2)/2), int(k2*(2*y2+h2)/2)
 
 if __name__ == '__main__':
 	
@@ -34,7 +39,8 @@ if __name__ == '__main__':
                                 flipped = cv2.flip(image,1)
                                 a.track(flipped)
                                 x, y, w, h = a.track_window
-                                m.moveTo((2 * x + w) / 2, (2 * y + h) / 2)
+                                movex,movey=scale_coordinates(m,a)
+                                m.moveTo(movex,movey)
                                 
                                 cv2.imshow("Camera", flipped)
                                 if not working:
@@ -48,4 +54,6 @@ if __name__ == '__main__':
         else:
                 print "Camera is not opened"
 
+    	cv2.destroyAllWindows()
+		
 
