@@ -1,4 +1,5 @@
 import sys
+from cv2 import destroyAllWindows
 from time import sleep
 from camera_controller import track_hand
 
@@ -30,6 +31,8 @@ if __name__ == '__main__':
 			break
 		movex,movey=scale_coordinates(m,a)
 		m.moveTo(movex,movey)
+	destroyAllWindows()
+	a.camera.release()
 	'''
 
 	m = Mouse()

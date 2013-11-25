@@ -12,7 +12,7 @@ class track_hand:
 		self.last_track_window=[0,0,0,0]
 		if self.camera.isOpened():
 			frame=cv2.imread('hand.jpg',1)
-			self.track_window=(100,100,50,50)
+			self.track_window=(0,0,640,480)
 			hsv_roi =  cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 			kernel=np.ones((5,5),np.float32)/25
 			hsv_roi=cv2.dilate(hsv_roi, kernel,iterations=2)
