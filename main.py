@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
         STEP = 10
         m = Mouse()
-        a = Track_hand()
+        a = Track_hand(camera)
 
         cv2.namedWindow("Camera")
         if camera.isOpened():
@@ -37,7 +37,7 @@ if __name__ == '__main__':
                         retval, image = camera.read()
                         
                         if retval:
-                                flipped = cv2.flip(image,1)
+                                flipped = cv2.flip(image,0)
                                 a.track(flipped)
                                 
                                 movex, movey = scale_coordinates(m, a, camera.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH), camera.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT))
