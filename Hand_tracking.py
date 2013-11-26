@@ -13,8 +13,8 @@ class Track_hand:
 		hsv_roi = cv2.dilate(hsv_roi, kernel, iterations=2)
 		hsv_roi = cv2.erode(hsv_roi, kernel, iterations=2)
 		
-		self.kalman1=cv2.cv.CreateKalman(4,2,0)
-		self.kalman2=cv2.cv.CreateKalman(4,2,0)
+		self.kalman1=cv2.cv.CreateKalman(6,2,0)
+		self.kalman2=cv2.cv.CreateKalman(6,2,0)
 		self.kalman1=self.Kalman_init(self.kalman1,0,0)
 		self.kalman2=self.Kalman_init(self.kalman2,800,600)
 		
@@ -30,10 +30,14 @@ class Track_hand:
 		kalman.transition_matrix[1,1] = 1
 		kalman.transition_matrix[2,2] = 1
 		kalman.transition_matrix[3,3] = 1
+		kalman.transition_matrix[4,4] = 1
+		kalman.transition_matrix[5,5] = 1
 		kalman.state_pre[0,0]=x
 		kalman.state_pre[1,0]=y
 		kalman.state_pre[2,0]=0
 		kalman.state_pre[3,0]=0
+		kalman.state_pre[4,0]=10
+		kalman.state_pre[5,0]=10
 		cv2.cv.SetIdentity(kalman.measurement_matrix, cv2.cv.RealScalar(1))
 		cv2.cv.SetIdentity(kalman.process_noise_cov, cv2.cv.RealScalar(1e-5))## 1e-5
 		cv2.cv.SetIdentity(kalman.measurement_noise_cov, cv2.cv.RealScalar(1e-1))
@@ -53,4 +57,6 @@ class Track_hand:
 		points1[0,0]=x; points1[1,0]=y; points2[0,0]=x+w; points2[1,0]=y+h
 		estimate1=cv2.cv.KalmanCorrect(self.kalman1,points1)
 		estimate2=cv2.cv.KalmanCorrect(self.kalman2,points2)
-		cv2.rectangle(image, (int(estimate1[0,0]), int(estimate1[1,0])), (int(estimate2[0,0]), int(estimate2[1,0])), 255, 2)
+		x1=int(estimate1[0,0]); x2=int(estimate2[0,0]); y1=int(estimate1[1,0]); y2=int(estimate2[1,0])
+		self.track_window=(x1,y1,x2-x1,y2-y1)
+		cv2.rectangle(image, (x1,y1),(x2,y2),255, 2)
