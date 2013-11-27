@@ -17,6 +17,14 @@ else:
 	print "OS not supported, probably Windows ;)"
 
 
+hmin=smin=vmin=0
+smax=vmax=255
+hmax=20
+
+
+def trackf(a):
+	pass
+
 def scale_coordinates(m, cam, frameWidth, frameHeight):
 	x2, y2, w2, h2 = a.track_window
 	k1 = m.maxX / frameWidth
@@ -25,7 +33,13 @@ def scale_coordinates(m, cam, frameWidth, frameHeight):
 	return int(k1 * (2 * x2 + w2) / 2), int(k2 * (2 * y2 + h2) / 2)
 
 if __name__ == '__main__':
-	
+	cv2.namedWindow("HSV values")
+	cv2.cv.CreateTrackbar("hmin","HSV values",hmin,255,trackf)
+	cv2.cv.CreateTrackbar("hmax","HSV values",hmax,255,trackf)
+	cv2.cv.CreateTrackbar("smin","HSV values",smin,255,trackf)
+	cv2.cv.CreateTrackbar("smax","HSV values",smax,255,trackf)
+	cv2.cv.CreateTrackbar("vmin","HSV values",vmin,255,trackf)
+	cv2.cv.CreateTrackbar("vmax","HSV values",vmax,255,trackf)
 	print "Opening camera..."
         camera = cv2.VideoCapture(0)
         working = 0
@@ -34,19 +48,27 @@ if __name__ == '__main__':
         m = Mouse()
         a = Track_hand(camera)
 
+	cv2.namedWindow("Projection")
         cv2.namedWindow("Camera")
         if camera.isOpened():
                 while True:
                         retval, image = camera.read()
                         
                         if retval:
+				hmin=cv2.getTrackbarPos("hmin","HSV values")
+				hmax=cv2.getTrackbarPos("hmax","HSV values")
+				smin=cv2.getTrackbarPos("smin","HSV values")
+				smax=cv2.getTrackbarPos("smax","HSV values")
+				vmin=cv2.getTrackbarPos("vmin","HSV values")
+				vmax=cv2.getTrackbarPos("vmax","HSV values")
                                 flipped = cv2.flip(image,orientation)
-                                a.track(flipped)
+                                tmp=a.track(flipped,hmin,hmax,smin,smax,vmin,vmax)
                                 
                                 movex, movey = scale_coordinates(m, a, camera.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH), camera.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT))
-                                m.moveTo(movex, movey)
+                                #m.moveTo(movex, movey)
                                 
                                 cv2.imshow("Camera", flipped)
+				cv2.imshow("Projection",tmp)
                                 if not working:
                                         print "Camera is working now..."
                                         working = 1

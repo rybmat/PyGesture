@@ -15,7 +15,7 @@ class Track_hand:
 		self.kalman1=self.Kalman_init(self.kalman1,0,0)
 		self.kalman2=self.Kalman_init(self.kalman2,800,600)
 		
-		mask = cv2.inRange(hsv_roi, np.array((0,100.,100.)), np.array((20.,173.,145.)))
+		mask = cv2.inRange(hsv_roi, np.array((0,30,60.)), np.array((20.,150.,255.)))
 		self.roi_hist = cv2.calcHist([hsv_roi], [0], mask, [13], [0, 180])
 		
 		cv2.normalize(self.roi_hist, self.roi_hist, 0, 255, cv2.NORM_MINMAX)
@@ -35,11 +35,14 @@ class Track_hand:
 		cv2.cv.SetIdentity(kalman.measurement_noise_cov, cv2.cv.RealScalar(1e-2))
 		cv2.cv.SetIdentity(kalman.error_cov_post, cv2.cv.RealScalar(0.1))
 		return kalman
-	def track(self, image):		
+	def track(self, image,hmin,hmax,smin,smax,vmin,vmax):
 		hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-		dst = cv2.calcBackProject([hsv], [0], self.roi_hist, [0, 180], 1)
+		mask = cv2.inRange(hsv, np.array((hmin,smin,vmin)), np.array((hmax,smax,vmax)))
+		roi_hist = cv2.calcHist([hsv], [0], mask, [180], [0, 180])
+		cv2.normalize(roi_hist, roi_hist, 0, 255, cv2.NORM_MINMAX)
+		dst = cv2.calcBackProject([hsv], [0], roi_hist, [0, 180], 1)
 		ret, self.track_window = cv2.CamShift(dst, self.track_window, self.term_crit)
-		#print self.track_window
+		print self.track_window
 		x, y, w, h = self.track_window
 		cv2.cv.KalmanPredict(self.kalman1)
 		cv2.cv.KalmanPredict(self.kalman2)
@@ -51,3 +54,4 @@ class Track_hand:
 		x1=int(estimate1[0,0]); x2=int(estimate2[0,0]); y1=int(estimate1[1,0]); y2=int(estimate2[1,0])
 		self.track_window=(x1,y1,x2-x1,y2-y1)
 		cv2.rectangle(image, (x1,y1),(x2,y2),255, 2)
+		return dst
