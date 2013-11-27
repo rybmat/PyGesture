@@ -14,7 +14,7 @@ if __name__ == "__main__":
 			retval, image = camera.read()
 			
 			if retval:
-				flipped = cv2.flip(image,1)
+				flipped = cv2.flip(image,0)
 				cv2.imshow("Camera", flipped)
 				if not working:
 					print "Camera is working now..."
