@@ -3,9 +3,12 @@ import cv2
 from time import sleep
 from Hand_tracking import Track_hand
 
+
+orientation=0
 system = sys.platform
 if system == 'darwin':
 	print "platform: OSX"
+	orientation=1
 	from OSX_mouse_controller import Mouse
 elif system == 'linux2':
 	print "platform: Linux2"
@@ -37,7 +40,7 @@ if __name__ == '__main__':
                         retval, image = camera.read()
                         
                         if retval:
-                                flipped = cv2.flip(image,0)
+                                flipped = cv2.flip(image,orientation)
                                 a.track(flipped)
                                 
                                 movex, movey = scale_coordinates(m, a, camera.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH), camera.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT))

@@ -9,18 +9,14 @@ class Track_hand:
 		self.track_window = (0, 0, 800, 600)
 		print self.track_window
 		hsv_roi =  cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-		kernel = np.ones((5, 5), np.float32) / 25
-		hsv_roi = cv2.dilate(hsv_roi, kernel, iterations=2)
-		hsv_roi = cv2.erode(hsv_roi, kernel, iterations=2)
 		
-		self.kalman1=cv2.cv.CreateKalman(6,2,0)
-		self.kalman2=cv2.cv.CreateKalman(6,2,0)
+		self.kalman1=cv2.cv.CreateKalman(4,2,0)
+		self.kalman2=cv2.cv.CreateKalman(4,2,0)
 		self.kalman1=self.Kalman_init(self.kalman1,0,0)
 		self.kalman2=self.Kalman_init(self.kalman2,800,600)
 		
-		hsv_roi = hsv_roi[:,:,:2]
-		mask = cv2.inRange(hsv_roi, np.array((5, 59)), np.array((10, 170)))
-		self.roi_hist = cv2.calcHist([hsv_roi], [0], mask, [180], [0, 180])
+		mask = cv2.inRange(hsv_roi, np.array((0,100.,100.)), np.array((20.,173.,145.)))
+		self.roi_hist = cv2.calcHist([hsv_roi], [0], mask, [13], [0, 180])
 		
 		cv2.normalize(self.roi_hist, self.roi_hist, 0, 255, cv2.NORM_MINMAX)
 		self.term_crit = ( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1 )
@@ -30,23 +26,18 @@ class Track_hand:
 		kalman.transition_matrix[1,1] = 1
 		kalman.transition_matrix[2,2] = 1
 		kalman.transition_matrix[3,3] = 1
-		kalman.transition_matrix[4,4] = 1
-		kalman.transition_matrix[5,5] = 1
 		kalman.state_pre[0,0]=x
 		kalman.state_pre[1,0]=y
 		kalman.state_pre[2,0]=0
 		kalman.state_pre[3,0]=0
-		kalman.state_pre[4,0]=10
-		kalman.state_pre[5,0]=10
 		cv2.cv.SetIdentity(kalman.measurement_matrix, cv2.cv.RealScalar(1))
-		cv2.cv.SetIdentity(kalman.process_noise_cov, cv2.cv.RealScalar(1e-5))## 1e-5
-		cv2.cv.SetIdentity(kalman.measurement_noise_cov, cv2.cv.RealScalar(1e-1))
+		cv2.cv.SetIdentity(kalman.process_noise_cov, cv2.cv.RealScalar(1e-3))## 1e-5
+		cv2.cv.SetIdentity(kalman.measurement_noise_cov, cv2.cv.RealScalar(1e-2))
 		cv2.cv.SetIdentity(kalman.error_cov_post, cv2.cv.RealScalar(0.1))
 		return kalman
 	def track(self, image):		
 		hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 		dst = cv2.calcBackProject([hsv], [0], self.roi_hist, [0, 180], 1)
-		
 		ret, self.track_window = cv2.CamShift(dst, self.track_window, self.term_crit)
 		#print self.track_window
 		x, y, w, h = self.track_window
