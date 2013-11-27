@@ -1,5 +1,6 @@
 import sys
-from time import sleep
+import numpy as np
+import cv2
 
 system = sys.platform
 if system == 'darwin':
@@ -11,79 +12,42 @@ elif system == 'linux2':
 else:
 	print "OS not supported, probably Windows ;)"
 
-import curses
+
 	
 if __name__ == '__main__':
+	hand_cascade = cv2.CascadeClassifier("training_data/training6/palm/cascade.xml")
 
-	STEP = 10
+	print "Opening camera..."
+	camera = cv2.VideoCapture(0)
+	working = 0
 
-	m = Mouse()
+	cv2.namedWindow("Camera")
+	if camera.isOpened():
+		while True:
+			retval, image = camera.read()
+			
+			if retval:
+				flipped = cv2.flip(image, 1)
+				img = flipped [:]
+				gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+				hands = hand_cascade.detectMultiScale(gray, 1.7, 6)
+				print "hands"
+				for (x, y, w, h) in hands:
+					
+					cv2.rectangle(img, (x,y), (x+w,y+h), (255,0,0), 2)
+					roi_gray = gray[y:y+h, x:x+w]
+					roi_color = img[y:y+h, x:x+w]
 
-	m.moveTo(500, 28)
-	sleep(1)
-	m.leftClick()
-	m.leftButtonDown()
-	sleep(1)
-	for i in xrange(10):
-		sleep(0.5)
-		m.moveBy(5,5)
-	m.leftButtonUp()
-	sleep(1)
-	for i in xrange(10):
-		sleep(0.5)
-		m.moveBy(5,10)
-	m.rightClick()
-	sleep(3)
-	m.leftClick()
-	for i in xrange(5):
-		sleep(0.5)
-		m.moveBy(-5,-10)
-	for i in xrange(5):
-		sleep(0.5)
-		m.moveBy(-5,-5)
-	m.leftButtonDown()
-	sleep(1)
-	for i in xrange(10):
-		sleep(0.5)
-		m.moveBy(5,5)
-	m.leftButtonUp()
 
-	#try:
-		#stdscr = curses.initscr()
-		#curses.cbreak()
-		#stdscr.keypad(1)
-#
-		#stdscr.addstr(0,10,"Hit 'q' to quit")
-		#stdscr.refresh()
-#
-		#key = ''
-		#while key != ord('q'):
-		    #key = stdscr.getch()
-		    #stdscr.addch(20,25,key)
-		    #print "size " + str(m.x) + " " + str (m.y) + " " + str(m.maxX) + " " + str(m.maxY)
-		    #stdscr.refresh()
-		    #if key == curses.KEY_UP: 
-		        #stdscr.addstr(2, 20, "Up")
-		        #m.moveBy(0, -STEP)	        
-#
-		    #elif key == curses.KEY_DOWN: 
-		        #stdscr.addstr(3, 20, "Down")
-		        #m.moveBy(0, STEP)
-#
-		    #elif key == curses.KEY_LEFT:
-		    	#stdscr.addstr(4, 20, "Left")
-		        #m.moveBy(-STEP, 0)
-#
-		    #elif key == curses.KEY_RIGHT:
-		    	#stdscr.addstr(5, 20, "Right")
-		        #m.moveBy(STEP, 0)
-#
-		    #elif key == ord(' '):
-		    	#m.leftButtonDown()
-#
-		    #elif key == ord('b'):
-		    	#m.leftButtonUp()
-#
-	#finally:
-		#curses.endwin()
 
+				cv2.imshow("Camera", img)
+				if not working:
+					print "Camera is working now..."
+					working = 1
+			
+			#break on Escape
+			key = cv2.waitKey(20)
+			if key == 27:
+				break
+	else:
+		print "Camera is not opened"
