@@ -19,9 +19,9 @@ if __name__ == "__main__":
 					cv2.imshow("Camera", flipped)
 					name = "bg_img/image" + str(i) + ".jpg"
 					i += 1
-					r = cv2.imwrite("training_data/" + name, flipped)
+					#r = cv2.imwrite("training_data/" + name, flipped)
 					f.write(name + "\n")
-					print r
+					#print r
 					if not working:
 						print "Camera is working now..."
 						working = 1
