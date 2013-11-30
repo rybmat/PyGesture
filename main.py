@@ -24,14 +24,18 @@ def scale_mouse_coordinates(m,hands,camera):
 
 	
 if __name__ == '__main__':
-	hand_cascade = cv2.CascadeClassifier("training_data/training6/palm/cascade.xml")
+	
+	palm_cascade = cv2.CascadeClassifier("training_data/training6/palm/cascade.xml")
+	fist_cascade = cv2.CascadeClassifier("training_data/training6/fist/cascade.xml")
 
 	print "Opening camera..."
 	camera = cv2.VideoCapture(0)
 	working = 0
 
-	cv2.namedWindow("Camera")
 	m=Mouse()
+	
+	cv2.namedWindow("Camera")
+
 	if camera.isOpened():
 		while True:
 			retval, image = camera.read()
@@ -39,17 +43,26 @@ if __name__ == '__main__':
 			if retval:
 				flipped = cv2.flip(image, orientation)
 				img = flipped [:]
+				
 				gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-				hands = hand_cascade.detectMultiScale(gray, 1.7, 6)
-				print "hands"
-				for (x, y, w, h) in hands:
-					
-					cv2.rectangle(img, (x,y), (x+w,y+h), (255,0,0), 2)
+				palms = palm_cascade.detectMultiScale(gray, 1.7, 6)
+				fists = fist_cascade.detectMultiScale(gray, 1.7, 6)
+
+				for (x, y, w, h) in palms:
+					print "palm"
+					cv2.rectangle(img, (x,y), (x+w,y+h), (0,0,255), 2)
+					roi_gray = gray[y:y+h, x:x+w]
+					roi_color = img[y:y+h, x:x+w]
+
+				for (x, y, w, h) in fists:
+					print "fist"
+					cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 2)
 					roi_gray = gray[y:y+h, x:x+w]
 					roi_color = img[y:y+h, x:x+w]
 
 				#movex, movey = scale_mouse_coordinates(m,hands,camera)
 				#m.moveTo(movex,movey)
+				
 				cv2.imshow("Camera", img)
 				if not working:
 					print "Camera is working now..."

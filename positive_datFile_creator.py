@@ -1,3 +1,6 @@
+"""creates .dat file needet to haar training
+"""
+
 from os import listdir
 from os.path import isfile, join
 import cv2
