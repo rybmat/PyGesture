@@ -63,7 +63,7 @@ if __name__ == '__main__':
 				vmax=cv2.getTrackbarPos("vmax","HSV values")
                                 flipped = cv2.flip(image,orientation)
                                 tmp=a.track(flipped,hmin,hmax,smin,smax,vmin,vmax)
-                                
+                                flipped = a.cutTrackedImg(flipped)
                                 movex, movey = scale_coordinates(m, a, camera.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH), camera.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT))
                                 #m.moveTo(movex, movey)
                                 
