@@ -24,14 +24,14 @@ vmin=168
 vmax=234
 
 def button_down_effect(m,history):
-	while len(history)>50:
+	while len(history)>200:
 		del history[0]
 	if not history:
 		return
 	maxsq=max(history)
 	minsq=min(history)
 	k=(maxsq+minsq)/2
-	if history[len(history)-1]<k:
+	if history[len(history)-1]<100:
 		m.leftButtonDown()
 	else:
 		m.leftButtonUp()

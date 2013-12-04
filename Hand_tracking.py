@@ -34,6 +34,10 @@ class Track_hand:
 		cut=img[y:y+h,x:x+w]
 		tmp=cv2.cvtColor(cut,cv2.COLOR_BGR2HSV)
 		tmp=cv2.inRange(tmp,np.array((0,0,0)),np.array((13,255,255)))
+		kernel=np.ones((5,5),np.float32)/25
+		#tmp = cv2.erode(tmp, kernel, iterations = 1)
+		#tmp = cv2.dilate(tmp, kernel, iterations = 1)
+		
 		t=cv2.findContours(tmp,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_TC89_KCOS)
 		for el in t[0]:
 			moments=cv2.moments(el)
@@ -43,6 +47,8 @@ class Track_hand:
 			if moments['m00']>100:
 				self.hand_square_history.append(moments['m00'])
 				cv2.drawContours(img,[el],-1,(0,255,0),3)
+			else:
+				self.hand_square_history.append(moments['m00'])
 		return img
 		
 
@@ -52,7 +58,7 @@ class Track_hand:
 		roi_hist = cv2.calcHist([hsv], [0], mask, [180], [0, 180])
 		cv2.normalize(roi_hist, roi_hist, 0, 255, cv2.NORM_MINMAX)
 		dst = cv2.calcBackProject([hsv], [0], roi_hist, [0, 180], 1)
-		if self.__class__.iterations>30:
+		if self.__class__.iterations>24:
 			ret, self.track_window = cv2.CamShift(dst, self.track_window, self.term_crit)
 			x, y, w, h = self.track_window
 			cv2.cv.KalmanPredict(self.kalman1)
