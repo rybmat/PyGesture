@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<stage12>
+  <maxWeakCount>21</maxWeakCount>
+  <stageThreshold>-1.3600456714630127e+00</stageThreshold>
+  <weakClassifiers>
+    <_>
+      <internalNodes>
+        0 -1 178849 -4.9047936045099050e-05</internalNodes>
+      <leafValues>
+        2.8591430187225342e-01 -3.5085293650627136e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 64958 -2.7079377323389053e-03</internalNodes>
+      <leafValues>
+        -8.3408552408218384e-01 1.1516229808330536e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 190629 -2.2207633592188358e-03</internalNodes>
+      <leafValues>
+        5.2787220478057861e-01 -1.8358631432056427e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 165523 2.7042914181947708e-02</internalNodes>
+      <leafValues>
+        1.0627602785825729e-01 -8.8092207908630371e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 5422 -2.0294915884733200e-03</internalNodes>
+      <leafValues>
+        -7.4122887849807739e-01 1.1975984275341034e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 201598 -3.8206644239835441e-04</internalNodes>
+      <leafValues>
+        4.5032134652137756e-01 -2.1729600429534912e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 202829 3.3829925087047741e-05</internalNodes>
+      <leafValues>
+        -3.0360129475593567e-01 3.0154576897621155e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 209108 2.7131764218211174e-03</internalNodes>
+      <leafValues>
+        -2.2822150588035583e-01 4.0224128961563110e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 5412 2.8637680225074291e-03</internalNodes>
+      <leafValues>
+        1.0094847530126572e-01 -8.5578030347824097e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 211447 -1.5250317519530654e-03</internalNodes>
+      <leafValues>
+        4.9571779370307922e-01 -2.1478790044784546e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 164540 -8.3985831588506699e-03</internalNodes>
+      <leafValues>
+        6.6724753379821777e-01 -1.5240208804607391e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 210918 1.4025863492861390e-03</internalNodes>
+      <leafValues>
+        -1.0968752950429916e-01 5.7806497812271118e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 251611 1.3017257442697883e-03</internalNodes>
+      <leafValues>
+        1.2578064203262329e-01 -7.9569804668426514e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 188712 -1.7293773125857115e-03</internalNodes>
+      <leafValues>
+        5.1484209299087524e-01 -1.7927400767803192e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 188714 8.7344949133694172e-04</internalNodes>
+      <leafValues>
+        -2.0242688059806824e-01 4.6188101172447205e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 100599 -1.6569563746452332e-01</internalNodes>
+      <leafValues>
+        4.1485625505447388e-01 -2.0807297527790070e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 125104 4.5313797891139984e-02</internalNodes>
+      <leafValues>
+        -1.7271181941032410e-01 5.6535857915878296e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 126095 3.7543393671512604e-02</internalNodes>
+      <leafValues>
+        -1.7344383895397186e-01 4.9132829904556274e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 227613 2.7210325002670288e-02</internalNodes>
+      <leafValues>
+        -1.9256387650966644e-01 4.1091459989547729e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 191636 3.1428030342794955e-04</internalNodes>
+      <leafValues>
+        -2.5375753641128540e-01 3.1187063455581665e-01</leafValues></_>
+    <_>
+      <internalNodes>
+        0 -1 156439 1.3646075967699289e-03</internalNodes>
+      <leafValues>
+        1.2760633230209351e-01 -7.3838889598846436e-01</leafValues></_></weakClassifiers></stage12>
+</opencv_storage>
