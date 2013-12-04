@@ -4,7 +4,9 @@ import time
 
 
 class Track_hand:
+	iterations=0
 	def __init__(self,camera):
+		self.hand_square_history=[]
 		self.kalman1=cv2.cv.CreateKalman(4,2,0)
 		self.kalman2=cv2.cv.CreateKalman(4,2,0)
 		self.kalman1=self.Kalman_init(self.kalman1,0,0)
@@ -38,7 +40,8 @@ class Track_hand:
 			for i in el:
 				i[0,0]=i[0,0]+x
 				i[0,1]=i[0,1]+y
-			if moments['m00']>5000:
+			if moments['m00']>100:
+				self.hand_square_history.append(moments['m00'])
 				cv2.drawContours(img,[el],-1,(0,255,0),3)
 		return img
 		
@@ -49,17 +52,19 @@ class Track_hand:
 		roi_hist = cv2.calcHist([hsv], [0], mask, [180], [0, 180])
 		cv2.normalize(roi_hist, roi_hist, 0, 255, cv2.NORM_MINMAX)
 		dst = cv2.calcBackProject([hsv], [0], roi_hist, [0, 180], 1)
-		
-		ret, self.track_window = cv2.CamShift(dst, self.track_window, self.term_crit)
-		x, y, w, h = self.track_window
-		cv2.cv.KalmanPredict(self.kalman1)
-		cv2.cv.KalmanPredict(self.kalman2)
-		points1=cv2.cv.CreateMat(2, 1, cv2.cv.CV_32FC1)
-		points2=cv2.cv.CreateMat(2, 1, cv2.cv.CV_32FC1)
-		points1[0,0]=x; points1[1,0]=y; points2[0,0]=x+w; points2[1,0]=y+h
-		estimate1=cv2.cv.KalmanCorrect(self.kalman1,points1)
-		estimate2=cv2.cv.KalmanCorrect(self.kalman2,points2)
-		x1=int(estimate1[0,0]); x2=int(estimate2[0,0]); y1=int(estimate1[1,0]); y2=int(estimate2[1,0])
-		self.track_window=(x1,y1,x2-x1,y2-y1)
-		cv2.rectangle(image, (x1,y1),(x2,y2),255, 2)
+		if self.__class__.iterations>30:
+			ret, self.track_window = cv2.CamShift(dst, self.track_window, self.term_crit)
+			x, y, w, h = self.track_window
+			cv2.cv.KalmanPredict(self.kalman1)
+			cv2.cv.KalmanPredict(self.kalman2)
+			points1=cv2.cv.CreateMat(2, 1, cv2.cv.CV_32FC1)
+			points2=cv2.cv.CreateMat(2, 1, cv2.cv.CV_32FC1)
+			points1[0,0]=x; points1[1,0]=y; points2[0,0]=x+w; points2[1,0]=y+h
+			estimate1=cv2.cv.KalmanCorrect(self.kalman1,points1)
+			estimate2=cv2.cv.KalmanCorrect(self.kalman2,points2)
+			x1=int(estimate1[0,0]); x2=int(estimate2[0,0]); y1=int(estimate1[1,0]); y2=int(estimate2[1,0])
+			self.track_window=(x1,y1,x2-x1,y2-y1)
+			cv2.rectangle(image, (x1,y1),(x2,y2),255, 2)
+		else:
+			self.__class__.iterations+=1
 		return dst

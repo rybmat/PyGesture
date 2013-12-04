@@ -16,11 +16,25 @@ elif system == 'linux2':
 else:
 	print "OS not supported, probably Windows ;)"
 
+hmin=0
+hmax=14
+smin=61
+smax=192
+vmin=168
+vmax=234
 
-hmin=smin=vmin=0
-smax=vmax=255
-hmax=20
-
+def button_down_effect(m,history):
+	while len(history)>50:
+		del history[0]
+	if not history:
+		return
+	maxsq=max(history)
+	minsq=min(history)
+	k=(maxsq+minsq)/2
+	if history[len(history)-1]<k:
+		m.leftButtonDown()
+	else:
+		m.leftButtonUp()
 
 def trackf(a):
 	pass
@@ -28,7 +42,7 @@ def trackf(a):
 def scale_coordinates(m, cam, frameWidth, frameHeight):
 	x2, y2, w2, h2 = a.track_window
 	k1 = m.maxX / frameWidth
-	k2 = m.maxY / frameHeight
+	k2 = 0.5*m.maxY / frameHeight
 
 	return int(k1 * (2 * x2 + w2) / 2), int(k2 * (2 * y2 + h2) / 2)
 
@@ -65,8 +79,8 @@ if __name__ == '__main__':
                                 tmp=a.track(flipped,hmin,hmax,smin,smax,vmin,vmax)
                                 flipped = a.cutTrackedImg(flipped)
                                 movex, movey = scale_coordinates(m, a, camera.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH), camera.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT))
-                                #m.moveTo(movex, movey)
-                                
+                                m.moveTo(movex, movey)
+                               	button_down_effect(m,a.hand_square_history) 
                                 cv2.imshow("Camera", flipped)
 				cv2.imshow("Projection",tmp)
                                 if not working:
@@ -81,5 +95,3 @@ if __name__ == '__main__':
                 print "Camera is not opened"
 
     	cv2.destroyAllWindows()
-		
-
