@@ -46,20 +46,20 @@ if __name__ == '__main__':
 				
 				gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 				palms = palm_cascade.detectMultiScale(gray, 1.1, 7)
-				#fists = fist_cascade.detectMultiScale(gray, 1.1, 7)
+				fists = fist_cascade.detectMultiScale(gray, 1.1, 7)
 
 				for (x, y, w, h) in palms:
 					print "palm"
 					cv2.rectangle(img, (x,y), (x+w,y+h), (0,0,255), 2)
 					pos = (x, y, w, h)
 
-				movex, movey = scale_mouse_coordinates(m, pos, camera)
-				m.moveTo(movex,movey)
+				#movex, movey = scale_mouse_coordinates(m, pos, camera)
+				#m.moveTo(movex,movey)
 
-				#for (x, y, w, h) in fists:
-				#	print "fist"
-				#	cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 2)
-				#
+				for (x, y, w, h) in fists:
+					print "fist"
+					cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 2)
+				
 				
 				cv2.imshow("Camera", img)
 				if not working:
